@@ -1,6 +1,8 @@
 from torchvision import transforms
 from torchvision import models
 from PIL import Image
+from pathlib import Path
+MODEL_PATH = Path(__file__).parent / "model" / "model.pth"
 
 trained_model = None
 class_names = ['Front Breakage', 'Front Crushed', 'Front Normal', 'Rear Breakage', 'Rear Crushed', 'Rear Normal']
@@ -44,7 +46,9 @@ def predict(image_path):
 
     if trained_model is None:
         trained_model = CarClassifierResNet()
-        trained_model.load_state_dict(torch.load("model\model.pth"))
+        trained_model.load_state_dict(
+            torch.load(MODEL_PATH, map_location="cpu")
+        )
         trained_model.eval()
 
     with torch.no_grad():
